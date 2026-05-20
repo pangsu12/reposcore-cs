@@ -84,14 +84,6 @@ CoconaApp.Run((
 
         var service = new GitHubService(ownerName, repoName, token, parsedKeywords);
 
-        // ── 저장소 존재 여부 확인 ─────────────────────────────────────────────
-        if (!service.RepositoryExists())
-        {
-            Console.Error.WriteLine($"오류: '{repo}' 저장소가 존재하지 않거나 접근할 수 없습니다.");
-            Environment.Exit(1);
-            return;
-        }
-
         try
         {
             // ── Claims 전용 모드 ──────────────────────────────────────────────────
@@ -152,7 +144,7 @@ CoconaApp.Run((
             }
 
             var allNewPrs = service.GetPullRequests(since);
-            var allNewIssues = service.GetIssues(since);
+            var allNewIssues = service.GetIssues(since); // 존재하지 않는 저장소면 여기서 예외 발생
 
             List<string> contributors = allNewPrs.Select(p => p.AuthorLogin)
                 .Concat(allNewIssues.Select(i => i.AuthorLogin))
@@ -257,6 +249,14 @@ CoconaApp.Run((
         }
         catch (Exception ex)
         {
+            // 저장소가 존재하지 않는 경우 예외 메시지로 판단
+            if (ex.Message.Contains("Could not resolve to a Repository") ||
+                (ex.InnerException?.Message.Contains("Could not resolve to a Repository") == true))
+            {
+                Console.Error.WriteLine($"오류: '{repo}' 저장소가 존재하지 않거나 접근할 수 없습니다.");
+                Environment.Exit(1);
+                return;
+            }
             AnsiConsole.WriteException(ex);
         }
     }
