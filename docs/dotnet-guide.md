@@ -302,7 +302,7 @@ public class CliExecutionTests
     [Theory]
     [InlineData("--format=txt")]
     [InlineData("--format=csv")]
-    [InlineData("--format=txt --show-claims")]
+    [InlineData("--format=txt --claims=Issue")]
     public async Task Cli_Should_Run_Without_Error(string options)
     {
         var repo = "oss2025hnu/reposcore-cs";
