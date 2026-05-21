@@ -39,8 +39,6 @@ dotnet run -- --help
 
 ## Synopsis
 
-<!-- synopsis:start -->
-
 ```text
 Usage: reposcore-cs [--token <String>] [--claims <ClaimsMode>] [--format <OutputFormat>] [--output <String>] [--sort-by <SortBy>] [--sort-order <SortOrder>] [--keywords <String>] [--no-cache] [--help] [--version] repos0 ... reposN
 
@@ -61,8 +59,6 @@ Options:
   -h, --help                     Show help message
   --version                      Show version
 ```
-
-<!-- synopsis:end -->
 
 ## Synopsis 업데이트
 
