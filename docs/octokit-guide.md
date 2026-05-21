@@ -202,3 +202,59 @@ foreach (var pr in pullRequests)
 * 필요한 데이터만 선택해서 가져올 수 있습니다.
 
 ---
+
+## 병렬 비동기 처리 (Parallel Async Processing)
+
+### 순차 실행 vs 병렬 실행
+
+GraphQL 쿼리를 여러 개 실행할 때, 순차 실행은 각 요청이 완료된 후 다음 요청을 보내므로 느릴 수 있습니다.
+`Task.WhenAll`을 사용하면 여러 쿼리를 동시에 실행하여 성능을 높일 수 있습니다.
+
+```csharp
+// 순차 실행 (느림)
+var issues = await connection.Run(issueQuery);
+var pullRequests = await connection.Run(prQuery);
+
+// 병렬 실행 (빠름)
+var issueTask = connection.Run(issueQuery);
+var prTask = connection.Run(prQuery);
+var (issues, pullRequests) = await Task.WhenAll(issueTask, prTask);
+```
+
+### Task.WhenAll 사용 예시
+
+```csharp
+using Octokit.GraphQL;
+
+var connection = new Connection(
+    new ProductHeaderValue("reposcore-app"),
+    "YOUR_GITHUB_TOKEN"
+);
+
+var issueQuery = new Query()
+    .Repository("owner", "repo-name")
+    .Issues(first: 5)
+    .Nodes
+    .Select(issue => new { issue.Number, issue.Title });
+
+var prQuery = new Query()
+    .Repository("owner", "repo-name")
+    .PullRequests(first: 5)
+    .Nodes
+    .Select(pr => new { pr.Number, pr.Title });
+
+// 두 쿼리를 동시에 실행
+var results = await Task.WhenAll(
+    connection.Run(issueQuery),
+    connection.Run(prQuery)
+);
+
+var issues = results[0];
+var pullRequests = results[1];
+```
+
+### 주의사항
+
+- **예외 처리:** `Task.WhenAll`은 모든 Task가 완료될 때까지 기다립니다. 하나라도 실패하면 예외가 발생하므로 `try-catch`로 감싸야 합니다.
+- **API Rate Limit:** 동시에 너무 많은 요청을 보내면 GitHub API의 Rate Limit에 걸릴 수 있습니다. 요청 수를 적절히 조절하세요.
+- **응답 순서:** `Task.WhenAll`에 전달한 순서대로 결과가 반환됩니다.
