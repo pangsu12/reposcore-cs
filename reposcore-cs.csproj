@@ -11,14 +11,14 @@
 
  <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-      <_Parameter1>RepoScore.Tests</_Parameter1>
+      <_Parameter1>Test</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="RepoScore.Tests/**/*.cs" />
-    <EmbeddedResource Remove="RepoScore.Tests/**" />
-    <None Remove="RepoScore.Tests/**" />
+    <Compile Remove="Test/**/*.cs" />
+    <EmbeddedResource Remove="Test/**" />
+    <None Remove="Test/**" />
   </ItemGroup>
 
   <ItemGroup>
