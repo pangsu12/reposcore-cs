@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -20,7 +20,7 @@
     <EmbeddedResource Remove="Test/**" />
     <None Remove="Test/**" />
   </ItemGroup>
-  
+
 
   <ItemGroup>
     <PackageReference Include="Cocona" Version="2.2.0" />
@@ -33,7 +33,7 @@
 
   <!-- dotnet test 명령어 실행 시(VSTest 타겟) 테스트 프로젝트를 자동으로 실행하도록 후킹 -->
   <Target Name="RunTestsAutomatically" BeforeTargets="VSTest">
-    <Exec Command="dotnet test RepoScore.Tests/RepoScore.Tests.csproj --configuration $(Configuration) --logger &quot;console;verbosity=detailed&quot;" />
+    <Exec Command="dotnet test Test/Test.csproj --configuration $(Configuration) --logger &quot;console;verbosity=detailed&quot;" />
   </Target>
 
 </Project>
