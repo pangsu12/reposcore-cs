@@ -98,7 +98,7 @@ await CoconaApp.RunAsync(async (
                 // ── Claims 전용 모드 ──────────────────────────────────────────────────
                 if (claims != null)
                 {
-                    AnsiConsole.MarkupLine($"[[[blue]{ownerName}/{repoName}[/]]] 최근 이슈 선점 현황을 조회합니다...\n");
+                    Log.Information("[{Repo}] 최근 이슈 선점 현황을 조회합니다.", repo);
 
                     DateTimeOffset? claimsSince = (!noCache && cache.LastClaimsAnalyzedAt != DateTimeOffset.MinValue)
                         ? cache.LastClaimsAnalyzedAt
@@ -124,7 +124,7 @@ await CoconaApp.RunAsync(async (
                     return;
                 }
 
-                AnsiConsole.MarkupLine($"[yellow]{repo}[/] 기여자 데이터 수집 및 분석 중...");
+                Log.Information("[{Repo}] 기여자 데이터 수집 및 분석 중...", repo);
 
                 if (!Directory.Exists(repoOutput)) Directory.CreateDirectory(repoOutput);
 
@@ -276,7 +276,7 @@ await CoconaApp.RunAsync(async (
     {
         try
         {
-            AnsiConsole.MarkupLine($"\n[green]전체 저장소 합산 리포트 생성 중...[/]");
+            Log.Information("전체 저장소 합산 리포트 생성 중...");
 
             // 저장소별 결과를 순회하며 URL 기반 중복 제거 후 합산
             var totalUserIssues = new Dictionary<string, List<IssueRecord>>();
